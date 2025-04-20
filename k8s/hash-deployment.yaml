@@ -1,0 +1,36 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hash-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hash
+  template:
+    metadata:
+      labels:
+        app: hash
+    spec:
+      containers:
+        - name: hash
+          image: abobeida/hash-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector:4317"
+          livenessProbe:
+            httpGet:
+              path: /hash
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /hash
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+

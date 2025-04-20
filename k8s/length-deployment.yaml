@@ -1,0 +1,35 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: length-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: length
+  template:
+    metadata:
+      labels:
+        app: length
+    spec:
+      containers:
+      - name: length
+        image: abobeida/length-service:latest
+        ports:
+        - containerPort: 8081
+        env:
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://otel-collector:4317"
+        livenessProbe:
+          httpGet:
+            path: /length
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /length
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10

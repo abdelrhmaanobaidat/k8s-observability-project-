@@ -1,0 +1,7 @@
+
+query:
+  service:
+    type: NodePort
+collector:
+  service:
+    type: ClusterIP

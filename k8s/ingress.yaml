@@ -1,0 +1,26 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hash-length-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: local.hashlength.com
+    http:
+      paths:
+      - path: /hash
+        pathType: Prefix
+        backend:
+          service:
+            name: hash-service
+            port:
+              number: 80
+      - path: /length
+        pathType: Prefix
+        backend:
+          service:
+            name: length-service
+            port:
+              number: 80
